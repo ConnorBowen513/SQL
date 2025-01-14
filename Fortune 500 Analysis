@@ -1,4 +1,4 @@
---This analysis utilized the following Fortune 500 dataset:
+-- This analysis utilized the following Fortune 500 dataset:
 
 CREATE TABLE fortune_companies (
     company_id INTEGER PRIMARY KEY,
@@ -66,7 +66,7 @@ SELECT *
 FROM fortune_companies
 ;
 
---Examines Fortune Companies by industry, assessing average PTO, maternity benefits, and inclusion of health benefits.  
+-- Examines Fortune Companies by industry, assessing average PTO, maternity benefits, and inclusion of health benefits.  
 SELECT industry
 , COUNT (healthcare_benefits) AS Companies_With_HCBenefits
 , ROUND(AVG(paid_time_off_days),1) AS Avg_PTO_Days
