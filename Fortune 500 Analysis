@@ -59,14 +59,14 @@ VALUES
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
 
-#Analysis
+--Analysis
 
--- Show the full table for Fortune Companies.
+#1. Show the full table for Fortune Companies.
 SELECT *
 FROM fortune_companies
 ;
 
--- Examines Fortune Companies by industry, assessing average PTO, maternity benefits, and inclusion of health benefits.  
+#2. Examines Fortune Companies by industry, assessing average PTO, maternity benefits, and inclusion of health benefits.  
 SELECT industry
 , COUNT (healthcare_benefits) AS Companies_With_HCBenefits
 , ROUND(AVG(paid_time_off_days),1) AS Avg_PTO_Days
@@ -76,7 +76,7 @@ WHERE healthcare_benefits=1
 GROUP BY industry
 ;
 
--- Retrieve the top 5 revenue-generating companies from the Fortune Companies table that offer healthcare benefits, along with additional perks and average employee tenure.  
+#3. Retrieve the top 5 revenue-generating companies from the Fortune Companies table that offer healthcare benefits, along with additional perks and average employee tenure.  
 SELECT company_name
 , revenue AS revenue_billions, paid_time_off_days, maternity_leave_weeks
 , avg_employee_tenure
@@ -86,7 +86,7 @@ ORDER BY revenue DESC
 LIMIT 5
 ;
 
--- List technology companies with healthcare benefits and a minimum of 20 days PTO, sorted by PTO in descending order.  
+#4. List technology companies with healthcare benefits and a minimum of 20 days PTO, sorted by PTO in descending order.  
 SELECT company_name AS Technology_Companies
 ,paid_time_off_days
 FROM fortune_companies
@@ -96,7 +96,7 @@ AND industry="Technology"
 ORDER BY paid_time_off_days DESC
 ;
 
--- Show companies in the Energy industry and their rating for Parent Friendliness based off the CASE statement criteria.
+#5. Show companies in the Energy industry and their rating for Parent Friendliness based off the CASE statement criteria.
 SELECT company_name AS Energy_Companies
 , CASE WHEN maternity_leave_weeks>=10 THEN "Parent Friendly"
 WHEN maternity_leave_weeks>=6 THEN "Acceptable"
@@ -106,7 +106,7 @@ FROM fortune_companies
 WHERE industry="Energy"
 ;
 
--- Display the industries with an average employee tenure of 6 years or more.  
+#6. Display the industries with an average employee tenure of 6 years or more.  
 SELECT industry
 , ROUND(AVG(avg_employee_tenure),1) as Avg_Tenure
 FROM fortune_companies
