@@ -1,3 +1,5 @@
+--This project utilizes the following Superstore data: 
+
 CREATE TABLE superstore (
     item_id INTEGER PRIMARY KEY,
     item_name TEXT,
@@ -26,8 +28,8 @@ VALUES
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
 
-
-#For this project, I used SQL to query the Superstore database to get information about items sold at the store and their prices. 
+--Analysis
+--For this project, I used SQL to query the Superstore database to get information about items sold at the store and their prices. 
 
 #First, I wanted to create the table with all categories. I used limit to get a sneek peak at the data and reduce the SQL response time.
 SELECT *
@@ -35,19 +37,19 @@ FROM superstore
 LIMIT 5
 ;
 
-#Use a SELECT statement to order the items by price.
+#1. Use a SELECT statement to order the items by price.
 SELECT item_name
 ,price
 FROM superstore
 ORDER BY price 
 ;
 
-#Show a statistic about the item prices.
+#2. Show a statistic about the item prices.
 SELECT AVG(price)
 FROM superstore
 ;
 
-#Show a statistic about the price for items in the category of "Kitchen Supplies".
+#3. Show a statistic about the price for items in the category of "Kitchen Supplies".
 SELECT COUNT(category)
 ,AVG(price)
 ,category
@@ -55,7 +57,7 @@ FROM superstore
 WHERE category='Kitchen Supplies'
 ;
 
-#Show average price of items per category and the average rating. Insight reveals what categories needs further evaluation to see if QC issue, vendor issue, etc.
+#4. Show average price of items per category and the average rating. Insight reveals what categories needs further evaluation to see if QC issue, vendor issue, etc.
 SELECT AVG(average_rating)
 ,AVG(price)
 ,category
