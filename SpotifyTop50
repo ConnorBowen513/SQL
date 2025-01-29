@@ -1,0 +1,100 @@
+-- For this project, I downloaded Spotify data from Kaggle.
+-- Then I created a table to insert Spotify data into.
+-- Finally, I performed analytics on the data using SQLite
+
+#Creating the table:
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL )
+;
+
+--Analysis 
+# Preview table and data
+SELECT * 
+FROM BIT_DB.Spotifydata
+LIMIT 5
+;
+
+#1. First, I identified the top five most frequent artists in the top 50 songs. 
+SELECT artist_name, COUNT(artist_name) AS Song_Count
+FROM BIT_DB.spotifydata
+GROUP BY artist_name
+ORDER BY Song_Count desc
+LIMIT 5
+;
+
+#2. Next, I calculated the average popularity, energy rating, and song duration for the most frequently featured artist on the list.
+SELECT artist_name, AVG(popularity), AVG(energy), AVG(duration_ms)
+FROM BIT_DB.spotifydata
+WHERE artist_name = 'Olivia Rodrigo'
+;
+
+#3. Then, I determined the average tempo and duration for the 10 most popular songs.
+SELECT 'Top 10 Songs' AS Song_Range, AVG(tempo) AS Avg_Tempo, AVG(duration_ms) AS Avg_duration_ms
+FROM (SELECT tempo, duration_ms
+    FROM BIT_DB.spotifydata
+    ORDER BY popularity DESC
+    LIMIT 10 ) AS T_10_Songs
+;
+
+#4. After that, I analyzed the number of slow, medium, and fast songs in the top 50 songs.
+SELECT ROUND(AVG(tempo),2) AS Avg_Tempo 
+FROM BIT_DB.spotifydata
+; --120.96, Medium song will be deifned by the range of 110 - 130
+
+SELECT
+    CASE 
+        WHEN tempo > 150 THEN 'Very Fast Song (>150)'
+        WHEN tempo > 130 THEN 'Fast Song (>130)'
+        WHEN tempo BETWEEN 110 AND 130 THEN 'Medium Song (110 - 130)'
+        WHEN tempo < 110 THEN 'Slow Song (<110)'
+    END AS Tempo_Category,
+    COUNT(*) AS Song_Count
+FROM BIT_DB.spotifydata
+GROUP BY Tempo_Category
+ORDER BY Song_Count DESC
+;
+
+#5. Next, I identified the song with the highest danceability score, compared it to the average danceability, and noted its popularity score
+SELECT artist_name, track_name, popularity,AVG(popularity) AS Avg_Popularity, MAX(danceability) AS Highest_Dance_Score
+,ROUND(AVG(danceability),3) AS Avg_Dance_Score
+FROM BIT_DB.spotifydata
+;
+-- The song's danceability 0.223 high than average. However, it has a lower than the average popularity rating. This could be because the song is in spanish causing a language barrier for spofity users that have a different first language.
+
+#6. Finally, I found the longest and shortest songs in the dataset and recorded their popularity ratings.
+SELECT 'Longest Song' AS song_type, artist_name, track_name, duration_ms
+,(duration_ms / 60000) AS minutes,((duration_ms % 60000) / 1000) AS seconds, popularity
+FROM BIT_DB.spotifydata
+WHERE duration_ms = (SELECT MAX(duration_ms) FROM BIT_DB.Spotifydata)
+
+UNION
+
+SELECT 'Shortest Song' AS song_type, artist_name, track_name, duration_ms
+,(duration_ms / 60000) AS minutes,((duration_ms % 60000) / 1000) AS seconds, popularity
+FROM BIT_DB.spotifydata
+WHERE duration_ms = (SELECT MIN(duration_ms) FROM BIT_DB.Spotifydata)
+
+ORDER BY duration_ms DESC
+;
+
+
+
+
+
